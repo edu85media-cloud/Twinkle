@@ -1,25 +1,191 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Twinkle Accessories</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
-:root{--r:#c98f94;--d:#342b2c;--b:#f7e8ea;--c:#fffaf7;--g:#25d366}*{box-sizing:border-box}body{margin:0;background:var(--c);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial;color:var(--d)}button,input,select,textarea{font:inherit}button{cursor:pointer}.top{background:var(--r);color:#fff;text-align:center;padding:10px}header{position:sticky;top:0;z-index:10;background:#fffffff0;display:flex;justify-content:space-between;align-items:center;padding:15px 5%;border-bottom:1px solid #eadcdd}.logo{font:27px Georgia;color:#ad747b}.bag{border:0;border-radius:999px;padding:11px 16px;background:var(--d);color:#fff}.hero{padding:60px 7%;background:linear-gradient(135deg,#fff,#f8eaec);text-align:center}.hero h1{font:54px Georgia;margin:0}.hero p{color:#756a6c}.primary{display:inline-block;background:var(--r);color:#fff;padding:14px 24px;border-radius:999px;text-decoration:none;font-weight:700}section{padding:55px 6%}.title{text-align:center;font:38px Georgia;margin:0}.search{display:block;width:min(600px,100%);margin:25px auto;padding:14px 18px;border:1px solid #dcc7ca;border-radius:999px}.filters{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:25px}.filter{border:1px solid #dcc7ca;background:#fff;border-radius:999px;padding:9px 15px}.filter.active{background:var(--r);color:#fff}.products{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:1200px;margin:auto}.product{background:#fff;border:1px solid #eadcdd;border-radius:22px;overflow:hidden;position:relative}.product img,.ph{width:100%;height:270px;object-fit:cover}.ph{display:grid;place-items:center;background:var(--b);font-size:70px}.badge{position:absolute;top:12px;right:12px;background:#fff;padding:7px 10px;border-radius:999px;font-size:12px}.info{padding:17px}.price{font-weight:800;margin:12px 0}.add{width:100%;border:0;border-radius:12px;padding:13px;background:var(--d);color:#fff}.add:disabled{background:#aaa}.features{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.feature{text-align:center;background:var(--b);padding:20px;border-radius:18px}footer{background:#2d2425;color:#fff;padding:40px 6%;display:grid;grid-template-columns:2fr 1fr 1fr;gap:20px}.overlay{position:fixed;inset:0;background:#21151888;display:none;z-index:30}.overlay.open{display:block}.drawer{position:fixed;top:0;left:0;width:min(460px,100%);height:100%;overflow:auto;background:#fff;padding:22px;z-index:31;transform:translateX(-105%);transition:.25s}.drawer.open{transform:none}.head{display:flex;justify-content:space-between;align-items:center}.x{border:0;border-radius:50%;width:40px;height:40px}.cart-row{display:grid;grid-template-columns:65px 1fr auto;gap:10px;align-items:center;padding:13px 0;border-bottom:1px solid #eee}.cart-row img{width:65px;height:65px;object-fit:cover;border-radius:10px}.qty{display:flex;gap:8px}.summary{background:var(--b);padding:15px;border-radius:15px;margin-top:15px}.summary div{display:flex;justify-content:space-between;margin:7px 0}label{display:block;margin:12px 0 5px;font-weight:700}input,select,textarea{width:100%;padding:12px;border:1px solid #d9c8cb;border-radius:11px}textarea{min-height:75px}.wa{width:100%;background:var(--g);color:#fff;border:0;border-radius:13px;padding:15px;margin-top:15px}.modal{position:fixed;inset:0;display:none;place-items:center;background:#21151888;z-index:40;padding:15px}.modal.open{display:grid}.panel{width:min(850px,100%);max-height:94vh;overflow:auto;background:#fff;border-radius:22px;padding:22px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.actions,.row-actions{display:flex;gap:8px;flex-wrap:wrap}.actions{margin-top:15px}.btn{border:0;border-radius:10px;padding:10px 13px}.pink{background:var(--r);color:#fff}.dark{background:var(--d);color:#fff}.warn{background:#f4d9a8}.muted{background:#ddd}.danger{background:#f3c8c8}.admin-row{display:grid;grid-template-columns:55px 1fr auto;gap:10px;align-items:center;padding:12px 0;border-top:1px solid #eee}.admin-row img{width:55px;height:55px;object-fit:cover;border-radius:10px}.status{display:none;padding:10px;border-radius:10px;margin:12px 0}.status.show{display:block}.ok{background:#e8f6ea}.bad{background:#fde8e8}.loading{text-align:center;padding:30px;color:#756a6c}@media(max-width:900px){.products{grid-template-columns:repeat(2,1fr)}.features{grid-template-columns:repeat(2,1fr)}footer{grid-template-columns:1fr}}@media(max-width:520px){.hero h1{font-size:42px}.products{grid-template-columns:1fr}.product img,.ph{height:330px}.features{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.admin-row{grid-template-columns:45px 1fr}.row-actions{grid-column:1/-1}}
-</style></head><body>
-<div class="top">التوصيل لجميع محافظات سلطنة عُمان 🇴🇲</div><header><div class="logo">Twinkle Accessories</div><button class="bag" onclick="openCart()">🛍️ الحقيبة <span id="cartCount">0</span></button></header>
-<section class="hero"><h1>Shine with Twinkle ✨</h1><p>اختاري منتجاتك، أضيفيها للحقيبة، ثم أرسلي الفاتورة عبر واتساب.</p><a href="#shop" class="primary">تسوقي الآن</a></section>
-<section id="shop"><h2 class="title">المنتجات</h2><input id="search" class="search" placeholder="ابحثي..." oninput="renderProducts()"><div class="filters"><button class="filter active" onclick="setFilter('all',this)">الكل</button><button class="filter" onclick="setFilter('necklaces',this)">السلاسل</button><button class="filter" onclick="setFilter('rings',this)">الخواتم</button><button class="filter" onclick="setFilter('earrings',this)">الأقراط</button><button class="filter" onclick="setFilter('bracelets',this)">الأساور</button></div><div id="products" class="products"><div class="loading">جاري التحميل...</div></div></section>
-<section><div class="features"><div class="feature">🏠<h3>توصيل المنزل</h3><b>2.000 ر.ع</b></div><div class="feature">🏢<h3>توصيل المكتب</h3><b>1.000 ر.ع</b></div><div class="feature">🎁<h3>رسالة الهدية</h3></div><div class="feature">📝<h3>ملاحظات الطلب</h3></div></div></section>
-<footer><div><div id="secretAdmin" class="logo" style="color:#fff">Twinkle Accessories</div><p>Shine with Every Detail ✨</p></div><div>WhatsApp<br>+968 94711404</div><div>Instagram<br>@twinkleom26</div></footer>
-<div id="overlay" class="overlay" onclick="closeCart()"></div><aside id="drawer" class="drawer"><div class="head"><h2>الحقيبة</h2><button class="x" onclick="closeCart()">✕</button></div><div id="cartItems"></div><div id="checkout" style="display:none"><div class="summary"><div><span>المنتجات</span><span id="subtotal"></span></div><div><span>التوصيل</span><span id="shippingDisplay"></span></div><div><b>الإجمالي</b><b id="grandTotal"></b></div></div><label>الاسم *</label><input id="customerName"><label>الهاتف *</label><input id="customerPhone"><label>المحافظة *</label><select id="governorate"><option value="">اختاري</option><option>مسقط</option><option>شمال الباطنة</option><option>جنوب الباطنة</option><option>الداخلية</option><option>الظاهرة</option><option>البريمي</option><option>شمال الشرقية</option><option>جنوب الشرقية</option><option>الوسطى</option><option>ظفار</option><option>مسندم</option></select><label>الولاية والعنوان *</label><textarea id="address"></textarea><label>التوصيل</label><select id="shipping" onchange="renderCart()"><option value="1">مكتب — 1.000 ر.ع</option><option value="2">منزل — 2.000 ر.ع</option></select><label>رسالة الهدية</label><textarea id="giftMessage"></textarea><label>ملاحظات الطلب</label><textarea id="orderNotes"></textarea><button class="wa" onclick="sendOrder()">إتمام الطلب عبر واتساب</button></div></aside>
-<div id="adminModal" class="modal"><div class="panel"><div class="head"><h2>إدارة Twinkle</h2><button class="x" onclick="closeAdmin()">✕</button></div><div id="authArea"><p>لأول مرة افتحي الرابط مع <b>?setup=1</b>.</p><label>الإيميل</label><input id="adminEmail" type="email"><label>كلمة المرور</label><input id="adminPassword" type="password"><div class="actions"><button class="btn pink" onclick="signIn()">دخول</button><button id="signupBtn" class="btn muted" style="display:none" onclick="signUp()">إنشاء أول حساب</button></div><div id="authStatus" class="status"></div></div><div id="adminArea" style="display:none"><button class="btn muted" onclick="signOut()">تسجيل الخروج</button><input type="hidden" id="editId"><input type="hidden" id="oldImageUrl"><div class="grid"><div><label>الاسم بالعربي</label><input id="aNameAr"></div><div><label>الاسم بالإنجليزي</label><input id="aNameEn"></div><div><label>السعر</label><input id="aPrice" type="number" step="0.001"></div><div><label>القسم</label><select id="aCategory"><option value="necklaces">سلاسل</option><option value="rings">خواتم</option><option value="earrings">أقراط</option><option value="bracelets">أساور</option></select></div><div><label>الشارة</label><select id="aBadge"><option value="">بدون</option><option>جديد</option><option>الأكثر طلبًا</option><option>عرض</option></select></div><div><label>الصورة</label><input id="aImage" type="file" accept="image/*"></div></div><div class="actions"><button class="btn pink" onclick="saveProduct()">حفظ المنتج</button><button class="btn muted" onclick="clearForm()">تفريغ</button></div><div id="adminStatus" class="status"></div><div id="adminList"></div></div></div></div>
-<script>
-const URL="https://juerfukskumpwcjvkasz.supabase.co",KEY="sb_publishable_Y0zrJi2dYz083Y12PxG-aA_EmLFNUNB",db=window.supabase.createClient(URL,KEY);let PRODUCTS=[],cart={},activeFilter="all",session=null;try{cart=JSON.parse(localStorage.getItem("twinkle-live-cart")||"{}")}catch(e){}const money=n=>Number(n).toFixed(3)+" ر.ع",getProduct=id=>PRODUCTS.find(p=>p.id===id);function status(id,msg,ok=true){let e=document.getElementById(id);e.textContent=msg;e.className="status show "+(ok?"ok":"bad")}
-async function load(){let q=session?db.from("products").select("*").order("sort_order",{ascending:false}):db.from("products").select("*").eq("hidden",false).order("sort_order",{ascending:false}),{data,error}=await q;if(error){document.getElementById("products").innerHTML='<div class="loading">شغّلي ملف إعداد Supabase أولًا.</div>';return}PRODUCTS=data||[];renderProducts();renderCart();if(session)renderAdminList()}
-function renderProducts(){let q=(document.getElementById("search").value||"").toLowerCase(),list=PRODUCTS.filter(p=>!p.hidden&&(activeFilter==="all"||p.category===activeFilter)&&(`${p.name_ar} ${p.name_en||""}`.toLowerCase().includes(q)));document.getElementById("products").innerHTML=list.length?list.map(p=>`<article class="product">${p.badge?`<span class="badge">${p.badge}</span>`:""}${p.image_url?`<img src="${p.image_url}">`:'<div class="ph">✨</div>'}<div class="info"><h3>${p.name_ar}</h3><small>${p.name_en||""}</small><div class="price">${money(p.price)}</div><button class="add" ${p.in_stock?"":"disabled"} onclick="addToCart('${p.id}')">${p.in_stock?"أضف للحقيبة":"نفد المخزون"}</button></div></article>`).join(""):'<div class="loading">لا توجد منتجات.</div>'}
-function setFilter(c,b){activeFilter=c;document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderProducts()}function addToCart(id){cart[id]=(cart[id]||0)+1;saveCart()}function changeQty(id,d){cart[id]=(cart[id]||0)+d;if(cart[id]<=0)delete cart[id];saveCart()}function removeCart(id){delete cart[id];saveCart()}function saveCart(){localStorage.setItem("twinkle-live-cart",JSON.stringify(cart));renderCart()}
-function renderCart(){document.getElementById("cartCount").textContent=Object.values(cart).reduce((a,b)=>a+b,0);let rows=Object.entries(cart).filter(([id])=>getProduct(id)),box=document.getElementById("cartItems"),co=document.getElementById("checkout");if(!rows.length){box.innerHTML="<p>الحقيبة فارغة</p>";co.style.display="none";return}co.style.display="block";box.innerHTML=rows.map(([id,q])=>{let p=getProduct(id);return `<div class="cart-row">${p.image_url?`<img src="${p.image_url}">`:"✨"}<div><b>${p.name_ar}</b><div>${money(p.price)}</div><div class="qty"><button onclick="changeQty('${id}',-1)">−</button><b>${q}</b><button onclick="changeQty('${id}',1)">+</button></div></div><button onclick="removeCart('${id}')">حذف</button></div>`}).join("");let sub=rows.reduce((s,[id,q])=>s+Number(getProduct(id).price)*q,0),ship=Number(document.getElementById("shipping").value||1);subtotal.textContent=money(sub);shippingDisplay.textContent=money(ship);grandTotal.textContent=money(sub+ship)}
-function openCart(){overlay.classList.add("open");drawer.classList.add("open");renderCart()}function closeCart(){overlay.classList.remove("open");drawer.classList.remove("open")}function sendOrder(){let n=customerName.value.trim(),p=customerPhone.value.trim(),g=governorate.value,a=address.value.trim();if(!n||!p||!g||!a)return alert("أكملي البيانات المطلوبة");let rows=Object.entries(cart).filter(([id])=>getProduct(id)),ship=Number(shipping.value),sub=rows.reduce((s,[id,q])=>s+Number(getProduct(id).price)*q,0),lines=rows.map(([id,q],i)=>{let x=getProduct(id);return `${i+1}. ${x.name_ar}\nالكمية: ${q} × ${money(x.price)} = ${money(Number(x.price)*q)}`}).join("\n\n"),msg=`✨ طلب جديد من Twinkle Accessories ✨\n\nالاسم: ${n}\nالهاتف: ${p}\nالمحافظة: ${g}\nالعنوان: ${a}\nالتوصيل: ${ship===1?"مكتب":"منزل"} — ${money(ship)}\n\nرسالة الهدية: ${giftMessage.value.trim()||"لا توجد"}\nملاحظات الطلب: ${orderNotes.value.trim()||"لا توجد"}\n\nالمنتجات:\n${lines}\n\nالإجمالي: ${money(sub+ship)}`;location.href=`https://wa.me/96894711404?text=${encodeURIComponent(msg)}`}
-function openAdmin(){adminModal.classList.add("open")}function closeAdmin(){adminModal.classList.remove("open")}async function refreshSession(){let {data}=await db.auth.getSession();session=data.session;authArea.style.display=session?"none":"block";adminArea.style.display=session?"block":"none";signupBtn.style.display=new URLSearchParams(location.search).get("setup")==="1"?"inline-block":"none";await load()}
-async function signUp(){let e=adminEmail.value.trim(),p=adminPassword.value;if(!e||p.length<8)return status("authStatus","اكتبي إيميلًا وكلمة مرور من 8 أحرف",false);let {error}=await db.auth.signUp({email:e,password:p});status("authStatus",error?error.message:"تم إنشاء الحساب. أكدي الإيميل ثم سجلي الدخول.",!error)}async function signIn(){let {data,error}=await db.auth.signInWithPassword({email:adminEmail.value.trim(),password:adminPassword.value});if(error)return status("authStatus",error.message,false);session=data.session;refreshSession()}async function signOut(){await db.auth.signOut();session=null;refreshSession()}
-async function upload(file){if(!file)return null;let ext=(file.name.split(".").pop()||"jpg").toLowerCase(),path=`${crypto.randomUUID()}.${ext}`,{error}=await db.storage.from("product-images").upload(path,file);if(error)throw error;return db.storage.from("product-images").getPublicUrl(path).data.publicUrl}
-async function saveProduct(){let id=editId.value,name_ar=aNameAr.value.trim(),name_en=aNameEn.value.trim(),price=Number(aPrice.value),category=aCategory.value,badge=aBadge.value,file=aImage.files[0],old=oldImageUrl.value;if(!name_ar||!Number.isFinite(price))return status("adminStatus","أضيفي الاسم والسعر",false);try{status("adminStatus","جاري الحفظ...");let image_url=file?await upload(file):old,payload={name_ar,name_en,price,category,badge,image_url},r=id?await db.from("products").update(payload).eq("id",id):await db.from("products").insert({...payload,in_stock:true,hidden:false,sort_order:Date.now()});if(r.error)throw r.error;status("adminStatus","تم الحفظ وظهر للزبائن ✅");clearForm();await load()}catch(e){status("adminStatus",e.message,false)}}
-function editProduct(id){let p=getProduct(id);editId.value=id;oldImageUrl.value=p.image_url||"";aNameAr.value=p.name_ar;aNameEn.value=p.name_en||"";aPrice.value=p.price;aCategory.value=p.category;aBadge.value=p.badge||""}async function toggleStock(id,v){await db.from("products").update({in_stock:v}).eq("id",id);load()}async function toggleHidden(id,v){await db.from("products").update({hidden:v}).eq("id",id);load()}async function del(id){if(confirm("حذف المنتج؟")){await db.from("products").delete().eq("id",id);load()}}
-function clearForm(){["editId","oldImageUrl","aNameAr","aNameEn","aPrice","aImage"].forEach(id=>document.getElementById(id).value="");aCategory.value="necklaces";aBadge.value=""}function renderAdminList(){adminList.innerHTML=PRODUCTS.map(p=>`<div class="admin-row">${p.image_url?`<img src="${p.image_url}">`:"✨"}<div><b>${p.name_ar}</b><br><small>${money(p.price)} — ${p.in_stock?"متوفر":"نفد"} — ${p.hidden?"مخفي":"ظاهر"}</small></div><div class="row-actions"><button class="btn pink" onclick="editProduct('${p.id}')">تعديل</button><button class="btn warn" onclick="toggleStock('${p.id}',${!p.in_stock})">${p.in_stock?"نفد المخزون":"إرجاع متوفر"}</button><button class="btn muted" onclick="toggleHidden('${p.id}',${!p.hidden})">${p.hidden?"إظهار":"إخفاء"}</button><button class="btn danger" onclick="del('${p.id}')">حذف</button></div></div>`).join("")}
-let taps=0,t;secretAdmin.onclick=()=>{taps++;clearTimeout(t);t=setTimeout(()=>taps=0,3000);if(taps>=5){taps=0;openAdmin()}};if(new URLSearchParams(location.search).has("admin")||new URLSearchParams(location.search).has("setup"))openAdmin();db.channel("live").on("postgres_changes",{event:"*",schema:"public",table:"products"},load).subscribe();db.auth.onAuthStateChange((_e,s)=>{session=s;refreshSession()});refreshSession();
-</script></body></html>
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Twinkle Accessories</title>
+  <meta name="theme-color" content="#c98f94">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="topbar">📦 مدة تجهيز وتوصيل الطلبات: خلال أسبوع داخل سلطنة عُمان</div>
+
+  <header class="header">
+    <button class="bag-btn" id="bagBtn">🛍️ حقيبتي <span id="cartCount">0</span></button>
+    <div class="brand">Twinkle Accessories</div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-inner">
+        <p class="eyebrow">SHINE WITH EVERY DETAIL</p>
+        <h1>لمعتك تبدأ من هنا ✨</h1>
+        <p>إكسسوارات أنيقة مختارة بعناية لتكمّل كل إطلالة.</p>
+        <a class="primary-btn" href="#shop">تسوّقي الآن</a>
+      </div>
+    </section>
+
+    <section id="shop" class="section">
+      <div class="section-head">
+        <h2>المنتجات</h2>
+        <p>اختاري القطعة التي تناسبك</p>
+      </div>
+
+      <input id="search" class="search" placeholder="ابحثي عن منتج...">
+
+      <div class="filters" id="filters">
+        <button class="filter active" data-category="all">الكل</button>
+        <button class="filter" data-category="necklaces">السلاسل</button>
+        <button class="filter" data-category="rings">الخواتم</button>
+        <button class="filter" data-category="earrings">الأقراط</button>
+        <button class="filter" data-category="bracelets">الأساور</button>
+      </div>
+
+      <div id="productsGrid" class="products-grid">
+        <div class="loading">جاري تحميل المنتجات...</div>
+      </div>
+    </section>
+
+    <section class="section soft">
+      <div class="section-head">
+        <h2>لماذا تختارين Twinkle؟</h2>
+      </div>
+      <div class="features">
+        <article class="feature"><span>✨</span><h3>مختارة بعناية</h3><p>قطع أنيقة تناسب ذوقك اليومي والمناسبات.</p></article>
+        <article class="feature"><span>🎁</span><h3>مناسبة للهدايا</h3><p>خيارات جميلة ورسالة هدية حسب رغبتك.</p></article>
+        <article class="feature"><span>🚚</span><h3>توصيل لكل السلطنة</h3><p>توصيل المنزل 2 ر.ع، والمكتب 1 ر.ع.</p></article>
+        <article class="feature"><span>💬</span><h3>طلب عبر واتساب</h3><p>إتمام الطلب بسهولة مع فاتورة مرتبة.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div>
+      <div id="secretAdmin" class="footer-brand">Twinkle Accessories</div>
+      <p>اضغطي على الاسم 5 مرات بسرعة لفتح Twinkle Studio.</p>
+    </div>
+    <div><b>Instagram</b><br>@twinkleom26</div>
+    <div><b>WhatsApp</b><br>+968 94711404</div>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+
+  <div id="overlay" class="overlay"></div>
+  <aside id="cartDrawer" class="drawer">
+    <div class="drawer-head">
+      <h2>🛍️ حقيبتي</h2>
+      <button id="closeCart" class="icon-btn">✕</button>
+    </div>
+    <div id="cartItems"></div>
+
+    <div id="checkoutArea" class="checkout" hidden>
+      <div class="summary">
+        <div><span>المنتجات</span><b id="subtotal">0.000 ر.ع</b></div>
+        <div><span>التوصيل</span><b id="shippingCost">1.000 ر.ع</b></div>
+        <div class="total"><span>الإجمالي</span><b id="grandTotal">0.000 ر.ع</b></div>
+      </div>
+
+      <label>الاسم *</label>
+      <input id="customerName">
+
+      <label>الهاتف *</label>
+      <input id="customerPhone" inputmode="tel">
+
+      <label>المحافظة *</label>
+      <select id="governorate">
+        <option value="">اختاري</option>
+        <option>مسقط</option><option>شمال الباطنة</option><option>جنوب الباطنة</option>
+        <option>الداخلية</option><option>الظاهرة</option><option>البريمي</option>
+        <option>شمال الشرقية</option><option>جنوب الشرقية</option><option>الوسطى</option>
+        <option>ظفار</option><option>مسندم</option>
+      </select>
+
+      <label>الولاية والعنوان *</label>
+      <textarea id="address"></textarea>
+
+      <label>طريقة التوصيل</label>
+      <select id="shipping">
+        <option value="1">توصيل مكتب — 1.000 ر.ع</option>
+        <option value="2">توصيل منزل — 2.000 ر.ع</option>
+      </select>
+
+      <label>رسالة الهدية</label>
+      <textarea id="giftMessage"></textarea>
+
+      <label>ملاحظات الطلب</label>
+      <textarea id="orderNotes"></textarea>
+
+      <button id="sendOrder" class="whatsapp-btn">إتمام الطلب عبر واتساب</button>
+    </div>
+  </aside>
+
+  <div id="adminModal" class="modal">
+    <div class="admin-panel">
+      <div class="drawer-head">
+        <div>
+          <h2>🌸 Twinkle Studio</h2>
+          <p>مرحبًا بعودتك ✨</p>
+        </div>
+        <button id="closeAdmin" class="icon-btn">✕</button>
+      </div>
+
+      <div id="authArea">
+        <p class="hint">لأول حساب افتحي رابط الموقع مع <b>?setup=1</b>.</p>
+        <label>الإيميل</label>
+        <input id="adminEmail" type="email">
+        <label>كلمة المرور</label>
+        <input id="adminPassword" type="password">
+        <div class="actions">
+          <button id="signInBtn" class="primary-small">دخول</button>
+          <button id="signUpBtn" class="secondary-small" hidden>إنشاء أول حساب</button>
+        </div>
+        <div id="authStatus" class="status"></div>
+      </div>
+
+      <div id="adminArea" hidden>
+        <div class="dashboard" id="dashboardStats"></div>
+
+        <button id="signOutBtn" class="secondary-small">تسجيل الخروج</button>
+
+        <input type="hidden" id="editId">
+        <input type="hidden" id="oldImageUrl">
+
+        <div class="admin-form">
+          <div><label>الاسم بالعربي</label><input id="aNameAr"></div>
+          <div><label>الاسم بالإنجليزي</label><input id="aNameEn"></div>
+          <div><label>السعر</label><input id="aPrice" type="number" step="0.001"></div>
+          <div><label>القسم</label>
+            <select id="aCategory">
+              <option value="necklaces">سلاسل</option>
+              <option value="rings">خواتم</option>
+              <option value="earrings">أقراط</option>
+              <option value="bracelets">أساور</option>
+            </select>
+          </div>
+          <div><label>الشارة</label>
+            <select id="aBadge">
+              <option value="">بدون</option>
+              <option>جديد</option>
+              <option>اختيار Twinkle</option>
+              <option>الأكثر طلبًا</option>
+              <option>عرض</option>
+            </select>
+          </div>
+          <div><label>المخزون</label><input id="aStock" type="number" min="0" step="1" value="1"></div>
+          <div class="full"><label>الصورة</label><input id="aImage" type="file" accept="image/*"></div>
+        </div>
+
+        <div class="actions">
+          <button id="saveProductBtn" class="primary-small">حفظ المنتج</button>
+          <button id="clearFormBtn" class="secondary-small">تفريغ</button>
+        </div>
+        <div id="adminStatus" class="status"></div>
+        <div id="adminList"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
