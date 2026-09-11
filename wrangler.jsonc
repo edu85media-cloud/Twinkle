@@ -3,5 +3,12 @@
   "compatibility_date": "2026-09-11",
   "assets": {
     "directory": "."
-  }
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "twinkle-db",
+      "database_id": "aa333cdc-0d40-4cc4-9838-78e2a8158b24"
+    }
+  ]
 }
