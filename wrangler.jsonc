@@ -10,5 +10,6 @@
       "database_name": "twinkle-db",
       "database_id": "aa333cdc-0d40-4cc4-9838-78e2a8158b24"
     }
-  ]
+  ],
+"observability": {"logs": {"enabled": true,"invocation_logs": true,"persist": true}}
 }
