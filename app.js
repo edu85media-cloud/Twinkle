@@ -516,3 +516,33 @@ $("signOutBtn")?.addEventListener("click", () => {
   $("adminArea").hidden = true;
   $("authArea").hidden = false;
 });
+
+$("clearFormBtn")?.addEventListener("click", () => {
+  $("editId").value = "";
+  $("oldImageUrl").value = "";
+  $("aNameAr").value = "";
+  $("aNameEn").value = "";
+  $("aPrice").value = "";
+  $("aCategory").value = "necklaces";
+  $("aBadge").value = "";
+  $("aStock").value = "1";
+  $("aImage").value = "";
+  $("adminStatus").textContent = "";
+});
+
+$("saveProductBtn")?.addEventListener("click", async () => {
+  const nameAr = $("aNameAr")?.value.trim();
+  const nameEn = $("aNameEn")?.value.trim();
+  const price = Number($("aPrice")?.value);
+  const category = $("aCategory")?.value;
+  const badge = $("aBadge")?.value || "";
+  const stock = Number($("aStock")?.value || 0);
+  const image = $("aImage")?.files?.[0];
+
+  if (!nameAr || !price || !category) {
+    $("adminStatus").textContent = "أدخلي اسم المنتج والسعر والقسم";
+    return;
+  }
+
+  $("adminStatus").textContent = "جاري حفظ المنتج...";
+});
