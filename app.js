@@ -498,3 +498,21 @@ $("secretAdmin")?.addEventListener("click", () => {
     secretClicks = 0;
   }, 2000);
 });
+$("closeAdmin")?.addEventListener("click", () => $("adminModal")?.classList.remove("open"));
+$("signInBtn")?.addEventListener("click", () => {
+  const email = $("adminEmail")?.value.trim();
+  const password = $("adminPassword")?.value;
+
+  if (!email || !password) {
+    $("authStatus").textContent = "أدخلي الإيميل وكلمة المرور";
+    return;
+  }
+
+  $("authArea").hidden = true;
+  $("adminArea").hidden = false;
+});
+
+$("signOutBtn")?.addEventListener("click", () => {
+  $("adminArea").hidden = true;
+  $("authArea").hidden = false;
+});
