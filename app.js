@@ -529,7 +529,7 @@ $("clearFormBtn")?.addEventListener("click", () => {
   $("aImage").value = "";
   $("adminStatus").textContent = "";
 });
-
+console.log("SAVE BUTTON CODE LOADED");
 $("saveProductBtn")?.addEventListener("click", async () => {
   const nameAr = $("aNameAr")?.value.trim();
   const nameEn = $("aNameEn")?.value.trim();
