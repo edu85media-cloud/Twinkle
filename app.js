@@ -545,4 +545,30 @@ $("saveProductBtn")?.addEventListener("click", async () => {
   }
 
   $("adminStatus").textContent = "جاري حفظ المنتج...";
+    const response = await fetch("/api/products", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      name_ar: nameAr,
+      name_en: nameEn,
+      price: price,
+      category: category,
+      badge: badge,
+      stock_qty: stock,
+      image_url: ""
+    })
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    $("adminStatus").textContent =
+      result.error || "تعذر حفظ المنتج";
+    return;
+  }
+
+  $("adminStatus").textContent = "✅ تم حفظ المنتج";
+  await loadProducts();
 });
