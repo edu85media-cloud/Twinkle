@@ -485,3 +485,16 @@ async function start() {
 }
 
 start();
+let secretClicks = 0;
+$("secretAdmin")?.addEventListener("click", () => {
+  secretClicks++;
+
+  if (secretClicks >= 5) {
+    secretClicks = 0;
+    $("adminModal")?.classList.add("open");
+  }
+
+  setTimeout(() => {
+    secretClicks = 0;
+  }, 2000);
+});
