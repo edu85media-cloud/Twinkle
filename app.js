@@ -529,8 +529,8 @@ $("clearFormBtn")?.addEventListener("click", () => {
   $("aImage").value = "";
   $("adminStatus").textContent = "";
 });
-console.log("SAVE BUTTON CODE LOADED");
-$("saveProductBtn")?.addEventListener("click", async () => {
+console.log("SAVE BUTTON CODE LOADED");$("saveProductBtn")?.addEventListener("click", async () => {
+    alert("زر الحفظ اشتغل");
   const nameAr = $("aNameAr")?.value.trim();
   const nameEn = $("aNameEn")?.value.trim();
   const price = Number($("aPrice")?.value);
