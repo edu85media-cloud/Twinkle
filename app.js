@@ -538,6 +538,7 @@ $("saveProductBtn")?.addEventListener("click", async () => {
   const badge = $("aBadge")?.value || "";
   const stock = Number($("aStock")?.value || 0);
   const image = $("aImage")?.files?.[0];
+  const editId = $("editId")?.value;
 
   if (!nameAr || !price || !category) {
     $("adminStatus").textContent = "أدخلي اسم المنتج والسعر والقسم";
@@ -545,8 +546,10 @@ $("saveProductBtn")?.addEventListener("click", async () => {
   }
 
   $("adminStatus").textContent = "جاري حفظ المنتج...";
-    const response = await fetch("/api/products", {
-    method: "POST",
+    const response = await fetch(
+  editId ? `/api/products/${editId}` : "/api/products",
+  {
+    method: editId ? "PUT" : "POST",
     headers: {
       "Content-Type": "application/json"
     },
@@ -572,3 +575,79 @@ alert("خطأ الحفظ: " + JSON.stringify(result));
   $("adminStatus").textContent = "✅ تم حفظ المنتج";
   await loadProducts();
 });
+function renderAdminProducts() {
+  const list = $("adminList");
+  if (!list) return;
+
+  if (!products.length) {
+    list.innerHTML = "<p>لا توجد منتجات.</p>";
+    return;
+  }
+
+  list.innerHTML = products.map((p) => `
+    <div class="admin-product">
+      <b>${p.name_ar || "منتج"}</b>
+      <span>${money(p.price)} — المخزون: ${stockQty(p)}</span>
+
+      <button type="button" onclick="editAdminProduct('${p.id}')">
+        تعديل
+      </button>
+
+      <button type="button" onclick="deleteAdminProduct('${p.id}')">
+        حذف
+      </button>
+    </div>
+  `).join("");
+}
+function editAdminProduct(id) {
+  const p = getProduct(id);
+  if (!p) return;
+
+  $("editId").value = p.id;
+  $("oldImageUrl").value = p.image_url || "";
+
+  $("aNameAr").value = p.name_ar || "";
+  $("aNameEn").value = p.name_en || "";
+  $("aPrice").value = p.price || "";
+  $("aCategory").value = p.category || "necklaces";
+  $("aBadge").value = p.badge || "";
+  $("aStock").value = stockQty(p);
+
+  $("adminStatus").textContent =
+    "✏️ عدّلي البيانات ثم اضغطي حفظ المنتج";
+}
+async function deleteAdminProduct(id) {
+  const p = getProduct(id);
+  if (!p) return;
+
+  const ok = confirm(`حذف "${p.name_ar}" نهائيًا؟`);
+  if (!ok) return;
+
+  $("adminStatus").textContent = "جاري حذف المنتج...";
+
+  const response = await fetch(`/api/products/${id}`, {
+    method: "DELETE"
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    $("adminStatus").textContent =
+      result.error || "تعذر حذف المنتج";
+    return;
+  }
+
+  $("adminStatus").textContent = "✅ تم حذف المنتج";
+
+  await loadProducts();
+  renderAdminProducts();
+}
+const originalLoadProducts = loadProducts;
+
+loadProducts = async function () {
+  await originalLoadProducts();
+
+  if (!$("adminArea")?.hidden) {
+    renderAdminProducts();
+  }
+};
