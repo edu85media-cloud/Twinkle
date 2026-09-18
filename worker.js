@@ -33,7 +33,7 @@ export default {
           );
         }
 
-        const id = crypto.randomUUID();
+        const id = Date.now();
 
         await env.DB
           .prepare(`
