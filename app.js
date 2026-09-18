@@ -562,7 +562,7 @@ $("saveProductBtn")?.addEventListener("click", async () => {
   });
 
   const result = await response.json();
-
+alert("خطأ الحفظ: " + JSON.stringify(result));
   if (!response.ok) {
     $("adminStatus").textContent =
       result.error || "تعذر حفظ المنتج";
