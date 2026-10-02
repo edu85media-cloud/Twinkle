@@ -1,11 +1,24 @@
 const WHATSAPP_NUMBER = "96894711404";
 
+// ==============================
+// Cloudinary
+// ==============================
+
+const CLOUD_NAME = "dlp7ubhm";
+const UPLOAD_PRESET = "twinkle_upload";
+
+// ==============================
+// Store state
+// ==============================
+
 let products = [];
 let activeCategory = "all";
 let cart = {};
 
 try {
-  cart = JSON.parse(localStorage.getItem("twinkle-cart") || "{}");
+  cart = JSON.parse(
+    localStorage.getItem("twinkle-cart") || "{}"
+  );
 } catch {
   cart = {};
 }
@@ -16,10 +29,17 @@ const money = (value) =>
   `${Number(value || 0).toFixed(3)} ر.ع`;
 
 const getProduct = (id) =>
-  products.find((p) => String(p.id) === String(id));
+  products.find(
+    (p) => String(p.id) === String(id)
+  );
+
+// ==============================
+// Toast
+// ==============================
 
 function toast(message) {
   const el = $("toast");
+
   if (!el) return;
 
   el.textContent = message;
@@ -30,71 +50,127 @@ function toast(message) {
   }, 1800);
 }
 
+// ==============================
+// Stock
+// ==============================
+
 function stockQty(product) {
-  if (Number.isFinite(Number(product.stock_qty))) {
-    return Math.max(0, Number(product.stock_qty));
+  if (
+    Number.isFinite(
+      Number(product.stock_qty)
+    )
+  ) {
+    return Math.max(
+      0,
+      Number(product.stock_qty)
+    );
   }
 
-  if (Number.isFinite(Number(product.stock))) {
-    return Math.max(0, Number(product.stock));
+  if (
+    Number.isFinite(
+      Number(product.stock)
+    )
+  ) {
+    return Math.max(
+      0,
+      Number(product.stock)
+    );
   }
 
-  return product.in_stock === false || product.in_stock === 0 ? 0 : 1;
+  return product.in_stock === false ||
+    product.in_stock === 0
+    ? 0
+    : 1;
 }
 
 function stockLabel(product) {
   const qty = stockQty(product);
 
-  if (qty <= 0) return "⚫ نفد المخزون";
-  if (qty === 1) return "🔴 آخر قطعة";
-  if (qty <= 5) return "🟠 باقي عدد محدود";
+  if (qty <= 0) {
+    return "⚫ نفد المخزون";
+  }
+
+  if (qty === 1) {
+    return "🔴 آخر قطعة";
+  }
+
+  if (qty <= 5) {
+    return "🟠 باقي عدد محدود";
+  }
 
   return "🟢 متوفر";
 }
 
+// ==============================
+// Load products
+// ==============================
+
 async function loadProducts() {
   try {
-    const response = await fetch("/api/products", {
-      method: "GET",
-      headers: {
-        Accept: "application/json"
-      },
-      cache: "no-store"
-    });
+    const response = await fetch(
+      "/api/products",
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json"
+        },
+        cache: "no-store"
+      }
+    );
 
     if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
+      throw new Error(
+        `HTTP ${response.status}`
+      );
     }
 
     const data = await response.json();
 
     if (!Array.isArray(data)) {
-      throw new Error("Invalid products response");
+      throw new Error(
+        "Invalid products response"
+      );
     }
 
     products = data;
 
     renderProducts();
     renderCart();
+
+    if (!$("adminArea")?.hidden) {
+      renderAdminProducts();
+    }
   } catch (error) {
-    console.error("Failed to load products:", error);
+    console.error(
+      "Failed to load products:",
+      error
+    );
 
     const grid = $("productsGrid");
 
     if (grid) {
       grid.innerHTML =
-        `<div class="loading">تعذر تحميل المنتجات. حدّثي الصفحة.</div>`;
+        `<div class="loading">
+          تعذر تحميل المنتجات. حدّثي الصفحة.
+        </div>`;
     }
   }
 }
 
+// ==============================
+// Products
+// ==============================
+
 function renderProducts() {
   const grid = $("productsGrid");
+
   if (!grid) return;
 
   const search = $("search");
 
-  const q = (search?.value || "")
+  const q = (
+    search?.value || ""
+  )
     .trim()
     .toLowerCase();
 
@@ -109,9 +185,15 @@ function renderProducts() {
       p.category === activeCategory;
 
     const text =
-      `${p.name_ar || ""} ${p.name_en || ""}`.toLowerCase();
+      `${p.name_ar || ""} ${
+        p.name_en || ""
+      }`.toLowerCase();
 
-    return !hidden && categoryOk && text.includes(q);
+    return (
+      !hidden &&
+      categoryOk &&
+      text.includes(q)
+    );
   });
 
   grid.innerHTML = list.length
@@ -124,21 +206,35 @@ function renderProducts() {
 
               ${
                 p.badge
-                  ? `<span class="badge">${p.badge}</span>`
+                  ? `<span class="badge">
+                      ${p.badge}
+                    </span>`
                   : ""
               }
 
               ${
                 p.image_url
-                  ? `<img src="${p.image_url}" alt="${p.name_ar || "منتج"}">`
-                  : `<div class="placeholder">✨</div>`
+                  ? `<img
+                       src="${p.image_url}"
+                       alt="${
+                         p.name_ar ||
+                         "منتج"
+                       }"
+                     >`
+                  : `<div class="placeholder">
+                       ✨
+                     </div>`
               }
 
               <div class="product-info">
 
-                <h3>${p.name_ar || "منتج"}</h3>
+                <h3>
+                  ${p.name_ar || "منتج"}
+                </h3>
 
-                <small>${p.name_en || ""}</small>
+                <small>
+                  ${p.name_en || ""}
+                </small>
 
                 <div class="price">
                   ${money(p.price)}
@@ -150,7 +246,11 @@ function renderProducts() {
 
                 <button
                   class="add-btn"
-                  ${qty <= 0 ? "disabled" : ""}
+                  ${
+                    qty <= 0
+                      ? "disabled"
+                      : ""
+                  }
                   onclick="addToCart('${p.id}')"
                 >
                   ${
@@ -161,19 +261,27 @@ function renderProducts() {
                 </button>
 
               </div>
+
             </article>
           `;
         })
         .join("")
-    : `<div class="loading">لا توجد منتجات حاليًا.</div>`;
+    : `<div class="loading">
+         لا توجد منتجات حاليًا.
+       </div>`;
 }
 
-function setCategory(category, button) {
+function setCategory(
+  category,
+  button
+) {
   activeCategory = category;
 
   document
     .querySelectorAll(".filter")
-    .forEach((b) => b.classList.remove("active"));
+    .forEach((b) =>
+      b.classList.remove("active")
+    );
 
   if (button) {
     button.classList.add("active");
@@ -182,16 +290,26 @@ function setCategory(category, button) {
   renderProducts();
 }
 
+// ==============================
+// Cart
+// ==============================
+
 function addToCart(id) {
   const product = getProduct(id);
 
   if (!product) return;
 
-  const available = stockQty(product);
-  const current = Number(cart[id] || 0);
+  const available =
+    stockQty(product);
+
+  const current =
+    Number(cart[id] || 0);
 
   if (current >= available) {
-    toast("لا يمكن طلب كمية أكبر من المتوفر");
+    toast(
+      "لا يمكن طلب كمية أكبر من المتوفر"
+    );
+
     return;
   }
 
@@ -199,7 +317,9 @@ function addToCart(id) {
 
   saveCart();
 
-  toast("✨ تمت إضافة القطعة إلى حقيبتك");
+  toast(
+    "✨ تمت إضافة القطعة إلى حقيبتك"
+  );
 }
 
 function changeQty(id, delta) {
@@ -208,14 +328,19 @@ function changeQty(id, delta) {
   if (!product) return;
 
   const next =
-    Number(cart[id] || 0) + Number(delta);
+    Number(cart[id] || 0) +
+    Number(delta);
 
   if (next <= 0) {
     delete cart[id];
-  } else if (next <= stockQty(product)) {
+  } else if (
+    next <= stockQty(product)
+  ) {
     cart[id] = next;
   } else {
-    toast("وصلتِ للكمية المتوفرة");
+    toast(
+      "وصلتِ للكمية المتوفرة"
+    );
   }
 
   saveCart();
@@ -223,6 +348,7 @@ function changeQty(id, delta) {
 
 function removeFromCart(id) {
   delete cart[id];
+
   saveCart();
 }
 
@@ -238,87 +364,122 @@ function saveCart() {
 function renderCart() {
   const count = $("cartCount");
   const items = $("cartItems");
-  const checkoutArea = $("checkoutArea");
+  const checkoutArea =
+    $("checkoutArea");
 
-  if (!count || !items || !checkoutArea) return;
+  if (
+    !count ||
+    !items ||
+    !checkoutArea
+  ) {
+    return;
+  }
 
-  const entries = Object.entries(cart).filter(
-    ([id]) => getProduct(id)
-  );
+  const entries =
+    Object.entries(cart).filter(
+      ([id]) => getProduct(id)
+    );
 
-  count.textContent = entries.reduce(
-    (sum, [, qty]) => sum + Number(qty),
-    0
-  );
+  count.textContent =
+    entries.reduce(
+      (sum, [, qty]) =>
+        sum + Number(qty),
+      0
+    );
 
   if (!entries.length) {
-    items.innerHTML = "<p>حقيبتك فارغة.</p>";
+    items.innerHTML =
+      "<p>حقيبتك فارغة.</p>";
+
     checkoutArea.hidden = true;
+
     return;
   }
 
   checkoutArea.hidden = false;
 
-  items.innerHTML = entries
-    .map(([id, qty]) => {
-      const p = getProduct(id);
+  items.innerHTML =
+    entries
+      .map(([id, qty]) => {
+        const p =
+          getProduct(id);
 
-      return `
-        <div class="cart-row">
+        return `
+          <div class="cart-row">
 
-          ${
-            p.image_url
-              ? `<img src="${p.image_url}" alt="${p.name_ar || "منتج"}">`
-              : "✨"
-          }
-
-          <div>
-            <b>${p.name_ar || "منتج"}</b>
+            ${
+              p.image_url
+                ? `<img
+                     src="${p.image_url}"
+                     alt="${
+                       p.name_ar ||
+                       "منتج"
+                     }"
+                   >`
+                : "✨"
+            }
 
             <div>
-              ${money(p.price)}
+
+              <b>
+                ${p.name_ar || "منتج"}
+              </b>
+
+              <div>
+                ${money(p.price)}
+              </div>
+
+              <div class="qty">
+
+                <button
+                  onclick="changeQty('${id}', -1)"
+                >
+                  −
+                </button>
+
+                <b>${qty}</b>
+
+                <button
+                  onclick="changeQty('${id}', 1)"
+                >
+                  +
+                </button>
+
+              </div>
+
             </div>
 
-            <div class="qty">
-              <button onclick="changeQty('${id}', -1)">
-                −
-              </button>
+            <button
+              class="danger-small"
+              onclick="removeFromCart('${id}')"
+            >
+              حذف
+            </button>
 
-              <b>${qty}</b>
-
-              <button onclick="changeQty('${id}', 1)">
-                +
-              </button>
-            </div>
           </div>
+        `;
+      })
+      .join("");
 
-          <button
-            class="danger-small"
-            onclick="removeFromCart('${id}')"
-          >
-            حذف
-          </button>
+  const subtotal =
+    entries.reduce(
+      (sum, [id, qty]) => {
+        const product =
+          getProduct(id);
 
-        </div>
-      `;
-    })
-    .join("");
-
-  const subtotal = entries.reduce(
-    (sum, [id, qty]) => {
-      const product = getProduct(id);
-
-      return (
-        sum +
-        Number(product.price) *
-          Number(qty)
-      );
-    },
-    0
-  );
+        return (
+          sum +
+          Number(product.price) *
+            Number(qty)
+        );
+      },
+      0
+    );
 
   const shipping =
-    Number($("shipping")?.value || 1);
+    Number(
+      $("shipping")?.value || 1
+    );
 
   if ($("subtotal")) {
     $("subtotal").textContent =
@@ -332,34 +493,57 @@ function renderCart() {
 
   if ($("grandTotal")) {
     $("grandTotal").textContent =
-      money(subtotal + shipping);
+      money(
+        subtotal + shipping
+      );
   }
 }
 
+// ==============================
+// Cart drawer
+// ==============================
+
 function openCart() {
-  $("overlay")?.classList.add("open");
-  $("cartDrawer")?.classList.add("open");
+  $("overlay")?.classList.add(
+    "open"
+  );
+
+  $("cartDrawer")?.classList.add(
+    "open"
+  );
 
   renderCart();
 }
 
 function closeCart() {
-  $("overlay")?.classList.remove("open");
-  $("cartDrawer")?.classList.remove("open");
+  $("overlay")?.classList.remove(
+    "open"
+  );
+
+  $("cartDrawer")?.classList.remove(
+    "open"
+  );
 }
+
+// ==============================
+// WhatsApp order
+// ==============================
 
 function sendOrder() {
   const name =
-    $("customerName")?.value.trim() || "";
+    $("customerName")
+      ?.value.trim() || "";
 
   const phone =
-    $("customerPhone")?.value.trim() || "";
+    $("customerPhone")
+      ?.value.trim() || "";
 
   const governorate =
     $("governorate")?.value || "";
 
   const address =
-    $("address")?.value.trim() || "";
+    $("address")
+      ?.value.trim() || "";
 
   if (
     !name ||
@@ -367,72 +551,102 @@ function sendOrder() {
     !governorate ||
     !address
   ) {
-    alert("أكملي البيانات المطلوبة");
+    alert(
+      "أكملي البيانات المطلوبة"
+    );
+
     return;
   }
 
-  const entries = Object.entries(cart).filter(
-    ([id]) => getProduct(id)
-  );
+  const entries =
+    Object.entries(cart).filter(
+      ([id]) => getProduct(id)
+    );
 
   if (!entries.length) return;
 
   const shipping =
-    Number($("shipping")?.value || 1);
+    Number(
+      $("shipping")?.value || 1
+    );
 
-  const subtotal = entries.reduce(
-    (sum, [id, qty]) => {
-      const product = getProduct(id);
+  const subtotal =
+    entries.reduce(
+      (sum, [id, qty]) => {
+        const product =
+          getProduct(id);
 
-      return (
-        sum +
-        Number(product.price) *
-          Number(qty)
-      );
-    },
-    0
-  );
+        return (
+          sum +
+          Number(product.price) *
+            Number(qty)
+        );
+      },
+      0
+    );
 
-  const lines = entries
-    .map(([id, qty], index) => {
-      const p = getProduct(id);
+  const lines =
+    entries
+      .map(
+        ([id, qty], index) => {
+          const p =
+            getProduct(id);
 
-      return `${index + 1}. ${p.name_ar}
-الكمية: ${qty} × ${money(p.price)} = ${money(
-        Number(p.price) * Number(qty)
-      )}`;
-    })
-    .join("\n\n");
+          return `${index + 1}. ${
+            p.name_ar
+          }
+الكمية: ${qty} × ${money(
+            p.price
+          )} = ${money(
+            Number(p.price) *
+              Number(qty)
+          )}`;
+        }
+      )
+      .join("\n\n");
 
   const giftMessage =
-    $("giftMessage")?.value.trim() ||
+    $("giftMessage")
+      ?.value.trim() ||
     "لا توجد";
 
   const orderNotes =
-    $("orderNotes")?.value.trim() ||
+    $("orderNotes")
+      ?.value.trim() ||
     "لا توجد";
 
-  const message = `🌸 Twinkle Accessories
+  const message =
+`🌸 Twinkle Accessories
 ━━━━━━━━━━━━
 👤 الاسم: ${name}
 📱 الهاتف: ${phone}
 📍 المحافظة: ${governorate}
 🏠 العنوان: ${address}
 🚚 التوصيل: ${
-    shipping === 1 ? "مكتب" : "منزل"
-  } — ${money(shipping)}
+  shipping === 1
+    ? "مكتب"
+    : "منزل"
+} — ${money(shipping)}
 ━━━━━━━━━━━━
 🛍️ المنتجات:
 ${lines}
 ━━━━━━━━━━━━
-💰 الإجمالي: ${money(subtotal + shipping)}
+💰 الإجمالي: ${money(
+  subtotal + shipping
+)}
 💝 رسالة الهدية: ${giftMessage}
 📝 الملاحظات: ${orderNotes}`;
 
   location.href =
     `https://wa.me/${WHATSAPP_NUMBER}` +
-    `?text=${encodeURIComponent(message)}`;
+    `?text=${encodeURIComponent(
+      message
+    )}`;
 }
+
+// ==============================
+// Main events
+// ==============================
 
 function bindEvents() {
   $("bagBtn")?.addEventListener(
@@ -479,239 +693,584 @@ function bindEvents() {
     });
 }
 
-async function start() {
-  bindEvents();
-  await loadProducts();
-}
-
-start();
+// ==============================
+// Admin
+// ==============================
 
 let secretClicks = 0;
 
-$("secretAdmin")?.addEventListener("click", () => {
-  secretClicks++;
+$("secretAdmin")?.addEventListener(
+  "click",
+  () => {
+    secretClicks++;
 
-  if (secretClicks >= 5) {
-    secretClicks = 0;
-    $("adminModal")?.classList.add("open");
+    if (secretClicks >= 5) {
+      secretClicks = 0;
+
+      $("adminModal")
+        ?.classList.add("open");
+    }
+
+    setTimeout(() => {
+      secretClicks = 0;
+    }, 2000);
   }
-
-  setTimeout(() => {
-    secretClicks = 0;
-  }, 2000);
-});
+);
 
 $("closeAdmin")?.addEventListener(
   "click",
-  () => $("adminModal")?.classList.remove("open")
+  () =>
+    $("adminModal")
+      ?.classList.remove("open")
 );
 
-$("signInBtn")?.addEventListener("click", () => {
-  const email = $("adminEmail")?.value.trim();
-  const password = $("adminPassword")?.value;
+$("signInBtn")?.addEventListener(
+  "click",
+  () => {
+    const email =
+      $("adminEmail")
+        ?.value.trim();
 
-  if (!email || !password) {
-    $("authStatus").textContent =
-      "أدخلي الإيميل وكلمة المرور";
-    return;
-  }
+    const password =
+      $("adminPassword")
+        ?.value;
 
-  $("authArea").hidden = true;
-  $("adminArea").hidden = false;
-});
+    if (!email || !password) {
+      if ($("authStatus")) {
+        $("authStatus").textContent =
+          "أدخلي الإيميل وكلمة المرور";
+      }
 
-$("signOutBtn")?.addEventListener("click", () => {
-  $("adminArea").hidden = true;
-  $("authArea").hidden = false;
-});
-
-$("clearFormBtn")?.addEventListener("click", () => {
-  $("editId").value = "";
-  $("oldImageUrl").value = "";
-  $("aNameAr").value = "";
-  $("aNameEn").value = "";
-  $("aPrice").value = "";
-  $("aCategory").value = "necklaces";
-  $("aBadge").value = "";
-  $("aStock").value = "1";
-  $("aImage").value = "";
-  $("adminStatus").textContent = "";
-});
-
-$("saveProductBtn")?.addEventListener("click", async () => {
-  console.log("SAVE BUTTON CODE LOADED");
-
-  const nameAr = $("aNameAr")?.value.trim();
-  const nameEn = $("aNameEn")?.value.trim();
-  const price = Number($("aPrice")?.value);
-  const category = $("aCategory")?.value;
-  const badge = $("aBadge")?.value || "";
-  const stock = Number($("aStock")?.value || 0);
-  const image = $("aImage")?.files?.[0];
-  const editId = $("editId")?.value;
-
-  if (!nameAr || !price || !category) {
-    $("adminStatus").textContent =
-      "أدخلي اسم المنتج والسعر والقسم";
-    return;
-  }
-
-  $("adminStatus").textContent =
-    "جاري حفظ المنتج...";
-
-  const response = await fetch(
-    editId
-      ? `/api/products/${editId}`
-      : "/api/products",
-    {
-      method: editId ? "PUT" : "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        name_ar: nameAr,
-        name_en: nameEn,
-        price: price,
-        category: category,
-        badge: badge,
-        stock_qty: stock,
-
-        // عند تعديل المنتج نحتفظ برابط الصورة الموجود
-        image_url: $("oldImageUrl")?.value || ""
-      })
+      return;
     }
+
+    if ($("authArea")) {
+      $("authArea").hidden = true;
+    }
+
+    if ($("adminArea")) {
+      $("adminArea").hidden = false;
+    }
+
+    renderAdminProducts();
+  }
+);
+
+$("signOutBtn")?.addEventListener(
+  "click",
+  () => {
+    if ($("adminArea")) {
+      $("adminArea").hidden = true;
+    }
+
+    if ($("authArea")) {
+      $("authArea").hidden = false;
+    }
+  }
+);
+
+// ==============================
+// Clear admin form
+// ==============================
+
+$("clearFormBtn")?.addEventListener(
+  "click",
+  () => {
+    if ($("editId")) {
+      $("editId").value = "";
+    }
+
+    if ($("oldImageUrl")) {
+      $("oldImageUrl").value = "";
+    }
+
+    if ($("aNameAr")) {
+      $("aNameAr").value = "";
+    }
+
+    if ($("aNameEn")) {
+      $("aNameEn").value = "";
+    }
+
+    if ($("aPrice")) {
+      $("aPrice").value = "";
+    }
+
+    if ($("aCategory")) {
+      $("aCategory").value =
+        "necklaces";
+    }
+
+    if ($("aBadge")) {
+      $("aBadge").value = "";
+    }
+
+    if ($("aStock")) {
+      $("aStock").value = "1";
+    }
+
+    if ($("aImage")) {
+      $("aImage").value = "";
+    }
+
+    if ($("adminStatus")) {
+      $("adminStatus").textContent =
+        "";
+    }
+  }
+);
+
+// ==============================
+// Cloudinary image upload
+// ==============================
+
+async function uploadImageToCloudinary(
+  image
+) {
+  const formData =
+    new FormData();
+
+  formData.append(
+    "file",
+    image
   );
 
-  const result = await response.json();
-
-  alert(
-    "خطأ الحفظ: " +
-    JSON.stringify(result)
+  formData.append(
+    "upload_preset",
+    UPLOAD_PRESET
   );
 
-  if (!response.ok) {
-    $("adminStatus").textContent =
-      result.error || "تعذر حفظ المنتج";
-    return;
+  const response =
+    await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+      {
+        method: "POST",
+        body: formData
+      }
+    );
+
+  const result =
+    await response.json();
+
+  if (
+    !response.ok ||
+    !result.secure_url
+  ) {
+    console.error(
+      "Cloudinary error:",
+      result
+    );
+
+    throw new Error(
+      result?.error?.message ||
+        "تعذر رفع الصورة"
+    );
   }
 
-  $("adminStatus").textContent =
-    "✅ تم حفظ المنتج";
+  return result.secure_url;
+}
 
-  await loadProducts();
-});
+// ==============================
+// Save product
+// ==============================
+
+$("saveProductBtn")?.addEventListener(
+  "click",
+  async () => {
+    const nameAr =
+      $("aNameAr")
+        ?.value.trim();
+
+    const nameEn =
+      $("aNameEn")
+        ?.value.trim();
+
+    const price =
+      Number(
+        $("aPrice")?.value
+      );
+
+    const category =
+      $("aCategory")?.value;
+
+    const badge =
+      $("aBadge")?.value || "";
+
+    const stock =
+      Number(
+        $("aStock")?.value || 0
+      );
+
+    const image =
+      $("aImage")
+        ?.files?.[0];
+
+    const editId =
+      $("editId")?.value;
+
+    if (
+      !nameAr ||
+      !price ||
+      !category
+    ) {
+      if ($("adminStatus")) {
+        $("adminStatus").textContent =
+          "أدخلي اسم المنتج والسعر والقسم";
+      }
+
+      return;
+    }
+
+    try {
+      if ($("adminStatus")) {
+        $("adminStatus").textContent =
+          "جاري حفظ المنتج...";
+      }
+
+      // إذا كان المنتج موجودًا مسبقًا
+      // نحتفظ بالصورة القديمة
+      let imageUrl =
+        $("oldImageUrl")?.value ||
+        "";
+
+      // إذا اختيرت صورة جديدة
+      // نرفعها إلى Cloudinary
+      if (image) {
+        if ($("adminStatus")) {
+          $("adminStatus").textContent =
+            "جاري رفع الصورة...";
+        }
+
+        imageUrl =
+          await uploadImageToCloudinary(
+            image
+          );
+      }
+
+      if ($("adminStatus")) {
+        $("adminStatus").textContent =
+          "جاري حفظ بيانات المنتج...";
+      }
+
+      const response =
+        await fetch(
+          editId
+            ? `/api/products/${editId}`
+            : "/api/products",
+          {
+            method:
+              editId
+                ? "PUT"
+                : "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body: JSON.stringify({
+              name_ar: nameAr,
+              name_en: nameEn,
+              price: price,
+              category: category,
+              badge: badge,
+              stock_qty: stock,
+              image_url: imageUrl
+            })
+          }
+        );
+
+      let result = {};
+
+      try {
+        result =
+          await response.json();
+      } catch {
+        result = {};
+      }
+
+      if (!response.ok) {
+        console.error(
+          "Product save error:",
+          result
+        );
+
+        throw new Error(
+          result.error ||
+            "تعذر حفظ المنتج"
+        );
+      }
+
+      if ($("adminStatus")) {
+        $("adminStatus").textContent =
+          "✅ تم حفظ المنتج";
+      }
+
+      // تنظيف النموذج
+      if ($("editId")) {
+        $("editId").value = "";
+      }
+
+      if ($("oldImageUrl")) {
+        $("oldImageUrl").value = "";
+      }
+
+      if ($("aNameAr")) {
+        $("aNameAr").value = "";
+      }
+
+      if ($("aNameEn")) {
+        $("aNameEn").value = "";
+      }
+
+      if ($("aPrice")) {
+        $("aPrice").value = "";
+      }
+
+      if ($("aCategory")) {
+        $("aCategory").value =
+          "necklaces";
+      }
+
+      if ($("aBadge")) {
+        $("aBadge").value = "";
+      }
+
+      if ($("aStock")) {
+        $("aStock").value = "1";
+      }
+
+      if ($("aImage")) {
+        $("aImage").value = "";
+      }
+
+      await loadProducts();
+
+      renderAdminProducts();
+    } catch (error) {
+      console.error(
+        "Save product error:",
+        error
+      );
+
+      if ($("adminStatus")) {
+        $("adminStatus").textContent =
+          "❌ " +
+          (
+            error.message ||
+            "حدث خطأ أثناء الحفظ"
+          );
+      }
+    }
+  }
+);
+
+// ==============================
+// Admin products list
+// ==============================
 
 function renderAdminProducts() {
   const list = $("adminList");
+
   if (!list) return;
 
   if (!products.length) {
     list.innerHTML =
       "<p>لا توجد منتجات.</p>";
+
     return;
   }
 
-  list.innerHTML = products
-    .map(
-      (p) => `
-        <div class="admin-product">
-          <b>${p.name_ar || "منتج"}</b>
+  list.innerHTML =
+    products
+      .map(
+        (p) => `
+          <div class="admin-product">
 
-          <span>
-            ${money(p.price)} — المخزون: ${stockQty(p)}
-          </span>
+            ${
+              p.image_url
+                ? `<img
+                     src="${p.image_url}"
+                     alt="${
+                       p.name_ar ||
+                       "منتج"
+                     }"
+                   >`
+                : ""
+            }
 
-          <button
-            type="button"
-            onclick="editAdminProduct('${p.id}')"
-          >
-            تعديل
-          </button>
+            <b>
+              ${p.name_ar || "منتج"}
+            </b>
 
-          <button
-            type="button"
-            onclick="deleteAdminProduct('${p.id}')"
-          >
-            حذف
-          </button>
-        </div>
-      `
-    )
-    .join("");
+            <span>
+              ${money(p.price)}
+              —
+              المخزون:
+              ${stockQty(p)}
+            </span>
+
+            <button
+              type="button"
+              onclick="editAdminProduct('${p.id}')"
+            >
+              تعديل
+            </button>
+
+            <button
+              type="button"
+              onclick="deleteAdminProduct('${p.id}')"
+            >
+              حذف
+            </button>
+
+          </div>
+        `
+      )
+      .join("");
 }
+
+// ==============================
+// Edit product
+// ==============================
 
 function editAdminProduct(id) {
-  const p = getProduct(id);
+  const p =
+    getProduct(id);
+
   if (!p) return;
 
-  $("editId").value = p.id;
-  $("oldImageUrl").value =
-    p.image_url || "";
+  if ($("editId")) {
+    $("editId").value =
+      p.id;
+  }
 
-  $("aNameAr").value =
-    p.name_ar || "";
+  if ($("oldImageUrl")) {
+    $("oldImageUrl").value =
+      p.image_url || "";
+  }
 
-  $("aNameEn").value =
-    p.name_en || "";
+  if ($("aNameAr")) {
+    $("aNameAr").value =
+      p.name_ar || "";
+  }
 
-  $("aPrice").value =
-    p.price || "";
+  if ($("aNameEn")) {
+    $("aNameEn").value =
+      p.name_en || "";
+  }
 
-  $("aCategory").value =
-    p.category || "necklaces";
+  if ($("aPrice")) {
+    $("aPrice").value =
+      p.price || "";
+  }
 
-  $("aBadge").value =
-    p.badge || "";
+  if ($("aCategory")) {
+    $("aCategory").value =
+      p.category ||
+      "necklaces";
+  }
 
-  $("aStock").value =
-    stockQty(p);
+  if ($("aBadge")) {
+    $("aBadge").value =
+      p.badge || "";
+  }
 
-  $("adminStatus").textContent =
-    "✏️ عدّلي البيانات ثم اضغطي حفظ المنتج";
+  if ($("aStock")) {
+    $("aStock").value =
+      stockQty(p);
+  }
+
+  if ($("aImage")) {
+    $("aImage").value = "";
+  }
+
+  if ($("adminStatus")) {
+    $("adminStatus").textContent =
+      "✏️ عدّلي البيانات ثم اضغطي حفظ المنتج";
+  }
 }
 
+// ==============================
+// Delete product
+// ==============================
+
 async function deleteAdminProduct(id) {
-  const p = getProduct(id);
+  const p =
+    getProduct(id);
+
   if (!p) return;
 
-  const ok = confirm(
-    `حذف "${p.name_ar}" نهائيًا؟`
-  );
+  const ok =
+    confirm(
+      `حذف "${p.name_ar}" نهائيًا؟`
+    );
 
   if (!ok) return;
 
-  $("adminStatus").textContent =
-    "جاري حذف المنتج...";
-
-  const response = await fetch(
-    `/api/products/${id}`,
-    {
-      method: "DELETE"
-    }
-  );
-
-  const result =
-    await response.json();
-
-  if (!response.ok) {
+  if ($("adminStatus")) {
     $("adminStatus").textContent =
-      result.error || "تعذر حذف المنتج";
-    return;
+      "جاري حذف المنتج...";
   }
 
-  $("adminStatus").textContent =
-    "✅ تم حذف المنتج";
+  try {
+    const response =
+      await fetch(
+        `/api/products/${id}`,
+        {
+          method: "DELETE"
+        }
+      );
 
-  await loadProducts();
-  renderAdminProducts();
+    let result = {};
+
+    try {
+      result =
+        await response.json();
+    } catch {
+      result = {};
+    }
+
+    if (!response.ok) {
+      throw new Error(
+        result.error ||
+          "تعذر حذف المنتج"
+      );
+    }
+
+    if ($("adminStatus")) {
+      $("adminStatus").textContent =
+        "✅ تم حذف المنتج";
+    }
+
+    await loadProducts();
+
+    renderAdminProducts();
+  } catch (error) {
+    console.error(
+      "Delete product error:",
+      error
+    );
+
+    if ($("adminStatus")) {
+      $("adminStatus").textContent =
+        "❌ " +
+        (
+          error.message ||
+          "تعذر حذف المنتج"
+        );
+    }
+  }
 }
 
-const originalLoadProducts = loadProducts;
+// ==============================
+// Start
+// ==============================
 
-loadProducts = async function () {
-  await originalLoadProducts();
+async function start() {
+  bindEvents();
 
-  if (!$("adminArea")?.hidden) {
-    renderAdminProducts();
-  }
-};
+  await loadProducts();
+}
+
+start();
