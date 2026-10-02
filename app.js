@@ -485,7 +485,9 @@ async function start() {
 }
 
 start();
+
 let secretClicks = 0;
+
 $("secretAdmin")?.addEventListener("click", () => {
   secretClicks++;
 
@@ -498,13 +500,19 @@ $("secretAdmin")?.addEventListener("click", () => {
     secretClicks = 0;
   }, 2000);
 });
-$("closeAdmin")?.addEventListener("click", () => $("adminModal")?.classList.remove("open"));
+
+$("closeAdmin")?.addEventListener(
+  "click",
+  () => $("adminModal")?.classList.remove("open")
+);
+
 $("signInBtn")?.addEventListener("click", () => {
   const email = $("adminEmail")?.value.trim();
   const password = $("adminPassword")?.value;
 
   if (!email || !password) {
-    $("authStatus").textContent = "أدخلي الإيميل وكلمة المرور";
+    $("authStatus").textContent =
+      "أدخلي الإيميل وكلمة المرور";
     return;
   }
 
@@ -529,8 +537,10 @@ $("clearFormBtn")?.addEventListener("click", () => {
   $("aImage").value = "";
   $("adminStatus").textContent = "";
 });
+
 $("saveProductBtn")?.addEventListener("click", async () => {
-    console.log("SAVE BUTTON CODE LOADED");
+  console.log("SAVE BUTTON CODE LOADED");
+
   const nameAr = $("aNameAr")?.value.trim();
   const nameEn = $("aNameEn")?.value.trim();
   const price = Number($("aPrice")?.value);
@@ -541,95 +551,147 @@ $("saveProductBtn")?.addEventListener("click", async () => {
   const editId = $("editId")?.value;
 
   if (!nameAr || !price || !category) {
-    $("adminStatus").textContent = "أدخلي اسم المنتج والسعر والقسم";
+    $("adminStatus").textContent =
+      "أدخلي اسم المنتج والسعر والقسم";
     return;
   }
 
-  $("adminStatus").textContent = "جاري حفظ المنتج...";
-    const response = await fetch(
-  editId ? `/api/products/${editId}` : "/api/products",
-  {
-    method: editId ? "PUT" : "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      name_ar: nameAr,
-      name_en: nameEn,
-      price: price,
-      category: category,
-      badge: badge,
-      stock_qty: stock,
-      image_url: ""
-    })
-  });
+  $("adminStatus").textContent =
+    "جاري حفظ المنتج...";
+
+  const response = await fetch(
+    editId
+      ? `/api/products/${editId}`
+      : "/api/products",
+    {
+      method: editId ? "PUT" : "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name_ar: nameAr,
+        name_en: nameEn,
+        price: price,
+        category: category,
+        badge: badge,
+        stock_qty: stock,
+
+        // عند تعديل المنتج نحتفظ برابط الصورة الموجود
+        image_url: $("oldImageUrl")?.value || ""
+      })
+    }
+  );
 
   const result = await response.json();
-alert("خطأ الحفظ: " + JSON.stringify(result));
+
+  alert(
+    "خطأ الحفظ: " +
+    JSON.stringify(result)
+  );
+
   if (!response.ok) {
     $("adminStatus").textContent =
       result.error || "تعذر حفظ المنتج";
     return;
   }
 
-  $("adminStatus").textContent = "✅ تم حفظ المنتج";
+  $("adminStatus").textContent =
+    "✅ تم حفظ المنتج";
+
   await loadProducts();
 });
+
 function renderAdminProducts() {
   const list = $("adminList");
   if (!list) return;
 
   if (!products.length) {
-    list.innerHTML = "<p>لا توجد منتجات.</p>";
+    list.innerHTML =
+      "<p>لا توجد منتجات.</p>";
     return;
   }
 
-  list.innerHTML = products.map((p) => `
-    <div class="admin-product">
-      <b>${p.name_ar || "منتج"}</b>
-      <span>${money(p.price)} — المخزون: ${stockQty(p)}</span>
+  list.innerHTML = products
+    .map(
+      (p) => `
+        <div class="admin-product">
+          <b>${p.name_ar || "منتج"}</b>
 
-      <button type="button" onclick="editAdminProduct('${p.id}')">
-        تعديل
-      </button>
+          <span>
+            ${money(p.price)} — المخزون: ${stockQty(p)}
+          </span>
 
-      <button type="button" onclick="deleteAdminProduct('${p.id}')">
-        حذف
-      </button>
-    </div>
-  `).join("");
+          <button
+            type="button"
+            onclick="editAdminProduct('${p.id}')"
+          >
+            تعديل
+          </button>
+
+          <button
+            type="button"
+            onclick="deleteAdminProduct('${p.id}')"
+          >
+            حذف
+          </button>
+        </div>
+      `
+    )
+    .join("");
 }
+
 function editAdminProduct(id) {
   const p = getProduct(id);
   if (!p) return;
 
   $("editId").value = p.id;
-  $("oldImageUrl").value = p.image_url || "";
+  $("oldImageUrl").value =
+    p.image_url || "";
 
-  $("aNameAr").value = p.name_ar || "";
-  $("aNameEn").value = p.name_en || "";
-  $("aPrice").value = p.price || "";
-  $("aCategory").value = p.category || "necklaces";
-  $("aBadge").value = p.badge || "";
-  $("aStock").value = stockQty(p);
+  $("aNameAr").value =
+    p.name_ar || "";
+
+  $("aNameEn").value =
+    p.name_en || "";
+
+  $("aPrice").value =
+    p.price || "";
+
+  $("aCategory").value =
+    p.category || "necklaces";
+
+  $("aBadge").value =
+    p.badge || "";
+
+  $("aStock").value =
+    stockQty(p);
 
   $("adminStatus").textContent =
     "✏️ عدّلي البيانات ثم اضغطي حفظ المنتج";
 }
+
 async function deleteAdminProduct(id) {
   const p = getProduct(id);
   if (!p) return;
 
-  const ok = confirm(`حذف "${p.name_ar}" نهائيًا؟`);
+  const ok = confirm(
+    `حذف "${p.name_ar}" نهائيًا؟`
+  );
+
   if (!ok) return;
 
-  $("adminStatus").textContent = "جاري حذف المنتج...";
+  $("adminStatus").textContent =
+    "جاري حذف المنتج...";
 
-  const response = await fetch(`/api/products/${id}`, {
-    method: "DELETE"
-  });
+  const response = await fetch(
+    `/api/products/${id}`,
+    {
+      method: "DELETE"
+    }
+  );
 
-  const result = await response.json();
+  const result =
+    await response.json();
 
   if (!response.ok) {
     $("adminStatus").textContent =
@@ -637,11 +699,13 @@ async function deleteAdminProduct(id) {
     return;
   }
 
-  $("adminStatus").textContent = "✅ تم حذف المنتج";
+  $("adminStatus").textContent =
+    "✅ تم حذف المنتج";
 
   await loadProducts();
   renderAdminProducts();
 }
+
 const originalLoadProducts = loadProducts;
 
 loadProducts = async function () {
